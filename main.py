@@ -50,6 +50,7 @@ def fetchResponse():
 
     if response.status_code == 200:
         print("Success!")
+        saveJSON(response)
         return response
     else:
         print("An error occurred:", response.status_code)
@@ -61,9 +62,7 @@ def getResponse():
         with open("response.json") as file:
             return json.loads(file.read())
     except:
-        response = fetchResponse()
-        saveJSON(response)
-        return response.json()
+        return fetchResponse().json()
 
 
 def parseLinkedInProfile(social: list[dict]):
