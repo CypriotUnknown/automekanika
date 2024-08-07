@@ -37,35 +37,35 @@ def omit_keys(original_dict: dict, keys_to_omit: list[str]):
     return filtered_dict
 
 
-def saveJSON(response: Response):
+def save_json(response: Response):
     data = response.json()
 
     with open("response.json", "w") as file:
         json.dump(data, file, indent=4)
 
 
-def fetchResponse():
+def fetch_response():
     print("fetching...")
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         print("Success!")
-        saveJSON(response)
+        save_json(response)
         return response
     else:
         print("An error occurred:", response.status_code)
         exit(1)
 
 
-def getResponse():
+def get_response():
     try:
         with open("response.json") as file:
             return json.loads(file.read())
     except:
-        return fetchResponse().json()
+        return fetch_response().json()
 
 
-def parseLinkedInProfile(social: list[dict]):
+def parse_linked_in_profile(social: list[dict]):
     if social is not None:
         filtered_list = [
             theDict for theDict in social if theDict.get("network") == "linkedin"
@@ -76,7 +76,7 @@ def parseLinkedInProfile(social: list[dict]):
 
 
 def main():
-    response = getResponse()
+    response = get_response()
 
     hits: list = response["result"]["hits"]
 
@@ -92,7 +92,7 @@ def main():
             ),
             "email": address["email"],
             "phone": address["tel"],
-            "linkedIn": parseLinkedInProfile(exhibitor["social"]),
+            "linkedIn": parse_linked_in_profile(exhibitor["social"]),
             "url": exhibitor["href"],
             "aboutUs": exhibitor["description"]["text"],
         }
